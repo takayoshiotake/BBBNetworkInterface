@@ -11,6 +11,7 @@
 		123104F61DB11C780046A01C /* BBBNetworkInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123104F51DB11C780046A01C /* BBBNetworkInterfaceTests.swift */; };
 		123104F81DB11C780046A01C /* BBBNetworkInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 123104EA1DB11C780046A01C /* BBBNetworkInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		123105071DB120F20046A01C /* BBBNetworkInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123105061DB120F20046A01C /* BBBNetworkInterface.swift */; };
+		1231053A1DB1304B0046A01C /* BBBNetworkInterface-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 123105051DB120990046A01C /* BBBNetworkInterface-Bridging-Header.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +31,7 @@
 		123104F51DB11C780046A01C /* BBBNetworkInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBBNetworkInterfaceTests.swift; sourceTree = "<group>"; };
 		123104F71DB11C780046A01C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		123105021DB11F3D0046A01C /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		123105051DB120990046A01C /* Package-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Package-Bridging-Header.h"; sourceTree = "<group>"; };
+		123105051DB120990046A01C /* BBBNetworkInterface-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BBBNetworkInterface-Bridging-Header.h"; sourceTree = "<group>"; };
 		123105061DB120F20046A01C /* BBBNetworkInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBBNetworkInterface.swift; sourceTree = "<group>"; };
 		123105091DB126010046A01C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/iOS/Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,7 +79,7 @@
 				123105081DB125E00046A01C /* iOS */,
 				123104EA1DB11C780046A01C /* BBBNetworkInterface.h */,
 				123105061DB120F20046A01C /* BBBNetworkInterface.swift */,
-				123105051DB120990046A01C /* Package-Bridging-Header.h */,
+				123105051DB120990046A01C /* BBBNetworkInterface-Bridging-Header.h */,
 				123105021DB11F3D0046A01C /* module.modulemap */,
 			);
 			path = Sources;
@@ -110,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				123104F81DB11C780046A01C /* BBBNetworkInterface.h in Headers */,
+				1231053A1DB1304B0046A01C /* BBBNetworkInterface-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

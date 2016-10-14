@@ -1,4 +1,4 @@
-module BBBNetworkInterface {
-    header "Package-Bridging-Header.h"
+module BBBNetworkInterfacePrivate {
+    header "BBBNetworkInterface-Bridging-Header.h"
     export *
 }

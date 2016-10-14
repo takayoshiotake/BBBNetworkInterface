@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BBBNetworkInterfacePrivate
 
 enum BBBErrorType: Error {
     case systemError(rawErrno: Int32)
