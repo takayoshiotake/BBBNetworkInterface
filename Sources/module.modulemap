@@ -1,0 +1,4 @@
+module Bridging {
+    header "Package-Bridging-Header.h"
+    export *
+}
