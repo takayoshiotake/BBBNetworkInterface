@@ -6,7 +6,7 @@
 //
 //
 
-import Bridging
+import Foundation
 
 enum BBBErrorType: Error {
     case systemError(rawErrno: Int32)
