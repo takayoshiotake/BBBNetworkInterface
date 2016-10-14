@@ -23,13 +23,13 @@ public enum NetworkInterfaceAddressType {
 }
 
 public struct NetworkInterfaceAddress {
-    let type: NetworkInterfaceAddressType
-    let stringValue: String
+    public let type: NetworkInterfaceAddressType
+    public let stringValue: String
 }
 
 public struct NetworkInterface {
-    let name: String
-    var address: [NetworkInterfaceAddress]
+    public let name: String
+    public var address: [NetworkInterfaceAddress]
     
     init(name: String, address: [NetworkInterfaceAddress]) {
         self.name = name
