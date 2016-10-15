@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "123105BC1DB1E47D0046A01C"
-               BuildableName = "BBBNetworkInterface.macOS.framework"
+               BuildableName = "BBBNetworkInterface.framework"
                BlueprintName = "BBBNetworkInterface.macOS"
                ReferencedContainer = "container:BBBNetworkInterface.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "123105BC1DB1E47D0046A01C"
-            BuildableName = "BBBNetworkInterface.macOS.framework"
+            BuildableName = "BBBNetworkInterface.framework"
             BlueprintName = "BBBNetworkInterface.macOS"
             ReferencedContainer = "container:BBBNetworkInterface.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "123105BC1DB1E47D0046A01C"
-            BuildableName = "BBBNetworkInterface.macOS.framework"
+            BuildableName = "BBBNetworkInterface.framework"
             BlueprintName = "BBBNetworkInterface.macOS"
             ReferencedContainer = "container:BBBNetworkInterface.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "123105BC1DB1E47D0046A01C"
-            BuildableName = "BBBNetworkInterface.macOS.framework"
+            BuildableName = "BBBNetworkInterface.framework"
             BlueprintName = "BBBNetworkInterface.macOS"
             ReferencedContainer = "container:BBBNetworkInterface.xcodeproj">
          </BuildableReference>
