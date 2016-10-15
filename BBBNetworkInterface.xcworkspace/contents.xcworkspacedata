@@ -4,4 +4,7 @@
    <FileRef
       location = "group:BBBNetworkInterface.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Examples/Example.CLT/Example.CLT.xcodeproj">
+   </FileRef>
 </Workspace>
