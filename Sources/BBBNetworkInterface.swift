@@ -9,105 +9,110 @@
 import Foundation
 import BBBNetworkInterfacePrivate
 
-enum BBBErrorType: Error {
-    case systemError(rawErrno: Int32)
-    init(rawErrno: Int32) {
-        self = .systemError(rawErrno: rawErrno)
+public struct BBBNetworkInterface {
+
+    public enum ErrorType: Error {
+        case systemError(rawErrno: Int32)
+        init(rawErrno: Int32) {
+            self = .systemError(rawErrno: rawErrno)
+        }
     }
-}
 
-public enum NetworkInterfaceAddressType {
-    case ipv4
-    case ipv6
-    case link
-}
+    public enum AddressType {
+        case ipv4
+        case ipv6
+        case link
+    }
 
-public struct NetworkInterfaceAddress {
-    public let type: NetworkInterfaceAddressType
-    public let stringValue: String
-}
+    public struct Address {
+        public let type: AddressType
+        public let stringValue: String
+    }
 
-public struct NetworkInterface {
-    public let name: String
-    public var address: [NetworkInterfaceAddress]
+
+    public var name: String
+    public var address: [Address]
     
-    init(name: String, address: [NetworkInterfaceAddress]) {
+    public init(name: String, address: [Address]) {
         self.name = name
         self.address = address
     }
 }
 
-public func listNetworkInterfaces(_ verbose: Bool = false) -> [NetworkInterface] {
-    let interfaceAddressSequence: InterfaceAddressSequence
-    do {
-        try interfaceAddressSequence = InterfaceAddressSequence()
-    } catch {
-        return []
-    }
-    
-    var interfaceDict: [String: NetworkInterface] = [:]
-    for ifa: UnsafeMutablePointer<ifaddrs> in interfaceAddressSequence {
-        guard let name = String(validatingUTF8: ifa.pointee.ifa_name) else {
-            continue
+public extension BBBNetworkInterface {
+    static func listNetworkInterfaces(_ verbose: Bool = false) -> [BBBNetworkInterface] {
+        let interfaceAddressSequence: InterfaceAddressSequence
+        do {
+            try interfaceAddressSequence = InterfaceAddressSequence()
+        } catch {
+            return []
         }
         
-        var interface: NetworkInterface
-        if interfaceDict[name] == nil {
-            interfaceDict[name] = NetworkInterface(name: name, address: [])
-        }
-        interface = interfaceDict[name]!
-        
-        let family = Int32(ifa.pointee.ifa_addr.pointee.sa_family)
-        switch family {
-        case AF_INET:
-            let addr = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_in.self, capacity: 1).pointee.addrDescription()
-            interface.address.append(NetworkInterfaceAddress(type: .ipv4, stringValue: addr))
-            if verbose {
-                print("name=\(name), family=\(family), addr=\(addr)")
+        var interfaceDict: [String: BBBNetworkInterface] = [:]
+        for ifa: UnsafeMutablePointer<ifaddrs> in interfaceAddressSequence {
+            guard let name = String(validatingUTF8: ifa.pointee.ifa_name) else {
+                continue
             }
-            break
-        case AF_INET6:
-            let addr = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_in6.self, capacity: 1).pointee.addrDescription()
-            interface.address.append(NetworkInterfaceAddress(type: .ipv6, stringValue: addr))
-            if verbose {
-                print("name=\(name), family=\(family), addr=\(addr)")
+            
+            var interface: BBBNetworkInterface
+            if interfaceDict[name] == nil {
+                interfaceDict[name] = BBBNetworkInterface(name: name, address: [])
             }
-            break
-        case AF_LINK:
-            var link = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_dl.self, capacity: 1).pointee
-            if link.sdl_alen == 6 {
-                let data = rawPointer(&link.sdl_data).bindMemory(to: UInt8.self, capacity: Int(link.sdl_len)).advanced(by: Int(link.sdl_nlen))
-                let addr = String(format: "%02x-%02x-%02x-%02x-%02x-%02x", data[0], data[1], data[2], data[3], data[4], data[5])
-                interface.address.append(NetworkInterfaceAddress(type: .link, stringValue: addr))
+            interface = interfaceDict[name]!
+            
+            let family = Int32(ifa.pointee.ifa_addr.pointee.sa_family)
+            switch family {
+            case AF_INET:
+                let addr = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_in.self, capacity: 1).pointee.addrDescription()
+                interface.address.append(Address(type: .ipv4, stringValue: addr))
                 if verbose {
                     print("name=\(name), family=\(family), addr=\(addr)")
                 }
+                break
+            case AF_INET6:
+                let addr = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_in6.self, capacity: 1).pointee.addrDescription()
+                interface.address.append(Address(type: .ipv6, stringValue: addr))
+                if verbose {
+                    print("name=\(name), family=\(family), addr=\(addr)")
+                }
+                break
+            case AF_LINK:
+                var link = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_dl.self, capacity: 1).pointee
+                if link.sdl_alen == 6 {
+                    let data = rawPointer(&link.sdl_data).bindMemory(to: UInt8.self, capacity: Int(link.sdl_len)).advanced(by: Int(link.sdl_nlen))
+                    let addr = String(format: "%02x-%02x-%02x-%02x-%02x-%02x", data[0], data[1], data[2], data[3], data[4], data[5])
+                    interface.address.append(Address(type: .link, stringValue: addr))
+                    if verbose {
+                        print("name=\(name), family=\(family), addr=\(addr)")
+                    }
+                }
+                fallthrough
+            default:
+                if verbose {
+                    print("name=\(name), family=\(family)")
+                }
+                break
             }
-            fallthrough
-        default:
-            if verbose {
-                print("name=\(name), family=\(family)")
-            }
-            break
+            
+            interfaceDict[name] = interface
         }
         
-        interfaceDict[name] = interface
+        // Convert to [NetworkInterface]
+        return interfaceDict.map({ $0.1 })
     }
-    
-    // Convert to [NetworkInterface]
-    return interfaceDict.map({ $0.1 })
 }
 
-private func rawPointer(_ pointer: UnsafeRawPointer) -> UnsafeRawPointer {
+
+fileprivate func rawPointer(_ pointer: UnsafeRawPointer) -> UnsafeRawPointer {
     return pointer
 }
 
-private class InterfaceAddressSequence: Sequence {
+fileprivate class InterfaceAddressSequence: Sequence {
     lazy var firstPtr: UnsafeMutablePointer<ifaddrs>? = nil
     
     init() throws {
         if getifaddrs(&firstPtr) != 0 {
-            throw BBBErrorType(rawErrno: errno)
+            throw BBBNetworkInterface.ErrorType(rawErrno: errno)
         }
     }
     
@@ -122,7 +127,7 @@ private class InterfaceAddressSequence: Sequence {
     }
 }
 
-private class InterfaceAddressGenerator: IteratorProtocol {
+fileprivate class InterfaceAddressGenerator: IteratorProtocol {
     var nextPtr: UnsafeMutablePointer<ifaddrs>?
     
     init(_ nextPtr: UnsafeMutablePointer<ifaddrs>) {
@@ -141,7 +146,7 @@ private class InterfaceAddressGenerator: IteratorProtocol {
     }
 }
 
-private extension sockaddr_in {
+fileprivate extension sockaddr_in {
     func addrDescription() -> String {
         var addrDescription = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
         var sin_addr = self.sin_addr
@@ -150,7 +155,7 @@ private extension sockaddr_in {
     }
 }
 
-private extension sockaddr_in6 {
+fileprivate extension sockaddr_in6 {
     func addrDescription() -> String {
         var addrDescription = [CChar](repeating: 0, count: Int(INET6_ADDRSTRLEN))
         var sin6_addr = self.sin6_addr
