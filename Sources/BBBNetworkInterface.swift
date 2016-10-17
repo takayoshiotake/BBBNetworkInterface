@@ -68,14 +68,12 @@ public extension BBBNetworkInterface {
                 if verbose {
                     print("name=\(name), family=\(family), addr=\(addr)")
                 }
-                break
             case AF_INET6:
                 let addr = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_in6.self, capacity: 1).pointee.addrDescription()
                 interface.address.append(Address(type: .ipv6, stringValue: addr))
                 if verbose {
                     print("name=\(name), family=\(family), addr=\(addr)")
                 }
-                break
             case AF_LINK:
                 var link = UnsafeRawPointer(ifa.pointee.ifa_addr).bindMemory(to: sockaddr_dl.self, capacity: 1).pointee
                 if link.sdl_alen == 6 {
@@ -86,12 +84,15 @@ public extension BBBNetworkInterface {
                         print("name=\(name), family=\(family), addr=\(addr)")
                     }
                 }
-                fallthrough
+                else {
+                    if verbose {
+                        print("name=\(name), family=\(family)")
+                    }
+                }
             default:
                 if verbose {
                     print("name=\(name), family=\(family)")
                 }
-                break
             }
             
             interfaceDict[name] = interface
